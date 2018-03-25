@@ -7,7 +7,7 @@ from utils.models import BaseModel
 class User(AbstractUser, BaseModel):
     """用户"""
     class Meta:
-        db_table = "df_users"
+        db_table = 'df_users'
 
 class AreaInfo(models.Model):
     title=models.CharField(max_length=20)

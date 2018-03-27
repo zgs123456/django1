@@ -25,5 +25,6 @@ class Address(BaseModel):
     addr = models.CharField(max_length=256, verbose_name="详细地址")
     code = models.CharField(max_length=6, verbose_name="邮政编码")
     isDefault =models.BooleanField(default=False)
+    user = models.ForeignKey(User, null=True)
     class Meta:
         db_table = "df_address"

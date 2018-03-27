@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'tt_goods',
     'tt_orders',
     'tt_cart',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,9 +96,9 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'  # 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'  # 'UTC'
 
 USE_I18N = True
 
@@ -125,3 +126,27 @@ EMAIL_HOST_USER = 'zzgdream888@163.com'
 EMAIL_HOST_PASSWORD = 'python88'
 # 收件人看到的发件人
 EMAIL_FROM = '天天生鲜<zzgdream888@163.com>'
+
+#缓存
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/6",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Session
+# http://django-redis-chs.readthedocs.io/zh_CN/latest/#session-backend
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+LOGIN_URL = '/users/login'
+
+DEFAULT_FILE_STORAGE = 'utils.fastdfs.storage.FastDFSStorage'
+
+CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
+SERVER_IP = 'http://192.168.1.3:8888/'

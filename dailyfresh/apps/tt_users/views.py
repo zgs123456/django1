@@ -265,7 +265,7 @@ class SiteView(LoginRequiredViewMixin, View):  # RedirectView
         address.save()
 
         # 返回结果
-        return redirect('/user/site')
+        return redirect('/users/site')
 
 
 def area(request):

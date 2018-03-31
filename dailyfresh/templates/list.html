@@ -1,83 +1,106 @@
 {% extends 'base_goods.html' %}
 {% block body2 %}
 
-	<div class="navbar_con">
-		<div class="navbar clearfix">
-			<div class="subnav_con fl">
-				<h1>全部商品分类</h1>
-				<span></span>
-				<ul class="subnav">
-					{% for category in category_list %}
-                        <li><a href="/list{{ category.id }}",class="{{  category.logo}}">{{ category.name }}</a></li>
+    <div class="navbar_con">
+        <div class="navbar clearfix">
+            <div class="subnav_con fl">
+                <h1>全部商品分类</h1>
+                <span></span>
+                <ul class="subnav">
+                    {% for category in category_list %}
+                        <li><a href="/list{{ category.id }}" ,class="{{ category.logo }}">{{ category.name }}</a></li>
                     {% endfor %}
-				</ul>
-			</div>
-			<ul class="navlist fl">
-				<li><a href="/">首页</a></li>
-				<li class="interval">|</li>
-				<li><a href="/">手机生鲜</a></li>
-				<li class="interval">|</li>
-				<li><a href="/">抽奖</a></li>
-			</ul>
-		</div>
-	</div>
+                </ul>
+            </div>
+            <ul class="navlist fl">
+                <li><a href="/index">首页</a></li>
+                <li class="interval">|</li>
+                <li><a href="/">手机生鲜</a></li>
+                <li class="interval">|</li>
+                <li><a href="/">抽奖</a></li>
+            </ul>
+        </div>
+    </div>
 
-	<div class="breadcrumb">
-		<a href="#">全部分类</a>
-		<span>></span>
-		<a href="#">{{ category_now.name }}</a>
-	</div>
+    <div class="breadcrumb">
+        <a href="#">全部分类</a>
+        <span>></span>
+        <a href="#">{{ category_now.name }}</a>
+    </div>
 
-	<div class="main_wrap clearfix">
-		<div class="l_wrap fl clearfix">
-			<div class="new_goods">
-				<h3>新品推荐</h3>
-				<ul>
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl clearfix">
+            <div class="new_goods">
+                <h3>新品推荐</h3>
+                <ul>
                     {% for list in new_list %}
-					<li>
-						<a href="/list{{ list.id }}"><img src="{{ list.default_image.url }}"></a>
-						<h4><a href="/list{{ list.id }}">{{ list.name }}</a></h4>
-						<div class="prize">￥{{ list.price }}</div>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
-		</div>
+                        <li>
+                            <a href="/list{{ list.id }}"><img src="{{ list.default_image.url }}"></a>
+                            <h4><a href="/list{{ list.id }}">{{ list.name }}</a></h4>
+                            <div class="prize">￥{{ list.price }}</div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
-		<div class="r_wrap fr clearfix">
-			<div class="sort_bar">
-				<a href="#" class="active">默认</a>
-				<a href="#">价格</a>
-				<a href="#">人气</a>
-			</div>
+        <div class="r_wrap fr clearfix">
+            <div class="sort_bar">
 
-			<ul class="goods_type_list clearfix">
-				{%  for sku in page %}
-                <li>
-					<a href="/list{{ sku.id }}"><img src="{{ sku.default_image.url }}"></a>
-					<h4><a href="/list{{ sku.id }}">{{ sku.name }}</a></h4>
-					<div class="operate">
-						<span class="prize">￥{{ sku.price }}</span>
-						<span class="unit">{{ sku.price }}/{{ sku.unit }}</span>
-						<a href="#" class="add_goods" title="加入购物车"></a>
-					</div>
-				</li>
+                <a href="?order=1" {% if order == 1 %}class="active"{% endif %}>默认</a>
+                {% if order == 2 %}
+                    <a href="?order=3" class="active">价格(升)</a>
+                {% elif order == 3 %}
+                    <a href="?order=2" class="active">价格(降)</a>
+                {% else %}
+                    <a href="?order=2">价格(升)</a>
+                {% endif %}
+
+                <a href="?order=4" {% if order == 4 %}class="active">{% endif %}>人气</a>
+            </div>
+
+            <ul class="goods_type_list clearfix">
+                {% for sku in page %}
+                    <li>
+                        <a href="/list{{ sku.id }}"><img src="{{ sku.default_image.url }}"></a>
+                        <h4><a href="/list{{ sku.id }}">{{ sku.name }}</a></h4>
+                        <div class="operate">
+                            <span class="prize">￥{{ sku.price }}</span>
+                            <span class="unit">{{ sku.price }}/{{ sku.unit }}</span>
+                            <a href="#" class="add_goods" title="加入购物车"></a>
+                        </div>
+                    </li>
                 {% endfor %}
 
 
-			</ul>
+            </ul>
 
-			<div class="pagenation">
-				<a href="#"><上一页</a>
-				<a href="#" class="active">1</a>
-				<a href="#">2</a>
-				<a href="#">3</a>
-				<a href="#">4</a>
-				<a href="#">5</a>
-				<a href="#">下一页></a>
-			</div>
-		</div>
-	</div>
+            <div class="pagenation">
+                {% if page.has_previous %}
+                    <a href="?pindex=1&order:{{ order }}">首页</a>
+                    <a href="?pinden={{ page.number|add:-1 }}&order:{{ order }}">上一页</a>
+                {% else %}
+                    <span>首页</span>
+                    <span>上一页</span>
+                {% endif %}
+            {% for p in page_list %}
+                {% if p == page.number %}
+                    <span class="active">{{ p }}</span>
+                {% else %}
+                    <a href="?pindex={{ p }}&order={{ order }}" >{{ p }}</a>
+
+                {% endif %}
+            {% endfor %}
+                {% if page.has_next %}
+                    <a href="?pindex={{ page.number|add:1 }}&order:{{ order }}">下一页</a>
+                    <a href="?pindex={{ page.paginator.num_pages }}&order:{{ order }}">末页</a>
+                {% else %}
+                    <span>下一页</span>
+                    <span>末页</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 
 {% endblock body2 %}

@@ -1,13 +1,15 @@
 import os
 
-
 from django.conf import settings
 from django.shortcuts import render
 from django.core.cache import cache
 from django_redis import get_redis_connection
-from django.core.paginator import Paginator,Page
+from django.core.paginator import Paginator, Page
 from .models import GoodsCategory, IndexGoodsBanner, IndexPromotionBanner, IndexCategoryGoodsBanner, GoodsSKU
 from  django.http import Http404
+from haystack.generic_views import SearchView
+from utils.page_list import get_page_list
+
 
 def fdfs_test(request):
     category = GoodsCategory.objects.get(pk=1)
@@ -17,15 +19,10 @@ def fdfs_test(request):
     return render(request, 'fdfs_test.html', context)
 
 
-# Create your views here.
-
-
-
 def index(request):
-
-    context=cache.get('index')
+    context = cache.get('index')
     if context is None:
-        print('++++++++') #测试
+        print('++++++++')  # 测试
         category_list = GoodsCategory.objects.all()
         banner_list = IndexGoodsBanner.objects.all().order_by('index')
         adv_list = IndexPromotionBanner.objects.all().order_by('index')
@@ -43,15 +40,14 @@ def index(request):
         }
         cache.set('index', context, 3600)
 
-    response=render(request,'index.html',context)
-
+    response = render(request, 'index.html', context)
 
     return response
 
 
-def detail(request,sku_id):
+def detail(request, sku_id):
     try:
-        sku=GoodsSKU.objects.get(pk=sku_id)
+        sku = GoodsSKU.objects.get(pk=sku_id)
     except:
         raise Http404
     category_list = GoodsCategory.objects.all()
@@ -75,34 +71,78 @@ def detail(request,sku_id):
         if redis_client.llen(key) > 5:  # 判断列表的元素个数
             redis_client.rpop(key)  # 从列表的右侧删除一个元素
 
-    context={
-        'title':'商品详情',
-        'sku':sku,
-        'category_list':category_list,
+    context = {
+        'title': '商品详情',
+        'sku': sku,
+        'category_list': category_list,
         'new_list': new_list,
         'other_list': other_list,
 
-
     }
-    return  render(request,'detail.html',context)
+    return render(request, 'detail.html', context)
 
 
-def list_sku(request,category_id):
+def list_sku(request, category_id):
     try:
-        category_now=GoodsCategory.objects.get(pk=category_id)
+        category_now = GoodsCategory.objects.get(pk=category_id)
     except:
-        raise  Http404
-    sku_list=GoodsSKU.objects.filter(category_id=category_id).order_by('-id')
-    paginator=Paginator(sku_list,15)
-    page=paginator.page(1)
-    category_list=GoodsCategory.objects.all()
-    category_now=GoodsCategory.objects.get(pk=category_id)
-    new_list=category_now.goodssku_set.all().order_by('-id')[0:2]
-    context={
-        'tatle':'商品列表',
-        'page':page,
-        'category_list':category_list,
-        'category_now':category_now,
-        'new_list':new_list,
+        raise Http404
+    order = int(request.GET.get('order', 1))
+
+    if order == 2:
+        order_by = '-price'
+    elif order == 3:
+        order_by = 'price'
+    elif order == 4:
+        order_by = '-sales'
+    else:
+        order_by = '-id'
+
+    sku_list = GoodsSKU.objects.filter(category_id=category_id).order_by(order_by)
+    paginator = Paginator(sku_list, 1)
+    category_list = GoodsCategory.objects.all()
+    new_list = category_now.goodssku_set.all().order_by('-id')[0:2]
+    total_page = paginator.num_pages
+    pindex = int(request.GET.get('pindex', 1))
+    if pindex < 1:
+        pindex = 1
+    if pindex > total_page:
+        pindex = total_page
+    page = paginator.page(pindex)
+
+    # page_list = []
+    # if total_page <= 5:
+    #     page_list = range(1, total_page + 1)
+    # elif pindex <= 2:
+    #     page_list = range(1, 6)
+    # elif pindex > total_page - 1:
+    #     page_list = range(total_page - 4, total_page + 1)
+    # else:
+    #     page_list = range(pindex - 2, pindex + 3)
+    page_list=get_page_list(total_page,pindex)
+
+
+    context = {
+        'tatle': '商品列表',
+        'page': page,
+        'category_list': category_list,
+        'category_now': category_now,
+        'new_list': new_list,
+        'order': order,
+        'page_list': page_list,
     }
-    return render(request,'list.html',context)
+    return render(request, 'list.html', context)
+
+
+class MySearchView(SearchView):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title']='搜索结果'
+        context['category_list']=GoodsCategory.objects.all()
+
+        #页码控制
+        total_page=context['paginator'].num_pages
+        pindex=context['page_obj'].number
+        context['page_list']=get_page_list(total_page,pindex)
+
+        return context

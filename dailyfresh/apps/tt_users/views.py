@@ -9,10 +9,10 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, Signatur
 from celery_tasks.tasks import send_user_active
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from utils.views import  LoginRequiredViewMixin
+from utils.views import LoginRequiredViewMixin
 from django_redis import get_redis_connection
 from tt_goods.models import GoodsSKU
-
+import json
 
 
 class RegisterView(View):
@@ -75,7 +75,7 @@ class RegisterView(View):
         user.is_active = False
         user.save()
 
-        #加密用户编号
+        # 加密用户编号
         # serializer=Serializer(settings.SECRET_KEY,60*60)
         # value=serializer.dumps({'id':user.id}).decode()
         # #让用户激活：向注册的邮箱发邮件，点击邮件中的链接，转到本网站的激活地址
@@ -83,7 +83,7 @@ class RegisterView(View):
         # send_mail('天天生鲜-账户激活','',settings.EMAIL_FROM,[email],html_message=msg)
 
         # 通知celery执行此任务，并传递参数user
-        send_user_active.delay(user.id,user.email)
+        send_user_active.delay(user.id, user.email)
         # 提示
         return HttpResponse('注册成功，请稍候到邮箱中激活账户')
 
@@ -174,6 +174,30 @@ class LoginView(View):
             response.set_cookie('uname', uname, expires=60 * 60 * 24 * 7)
 
         # 如果登录成功则转到用户中心页面
+        # 读取cookie
+        cart_str=request.COOKIES.get('cart')
+        if cart_str:
+            key='cart%d'%request.user.id
+            redis_client=get_redis_connection()
+            cart_dict=json.loads(cart_str)
+            for k ,v in cart_dict.items():
+                # 判断购物车里是否有数据
+                if redis_client.hexists(key,k):
+                    # 有数据追加
+                    count1=int(redis_client.hget(key,k))
+                    count2=v
+                    count3=count1+count2
+                    if count3>5:
+                        count3=5
+                    redis_client.hset(key,k,count3)
+                else:
+                    # 没有数据直接加数据
+                    redis_client.hset(key,k,v)
+
+
+            response.delete_cookie('cart')
+
+
         return response
 
 
@@ -188,7 +212,7 @@ def logout_user(request):
 def info(request):
     # 如果用户未登录，则转到登录页面
     if not request.user.is_authenticated():
-        return redirect('/users/login?next='+request.path)
+        return redirect('/users/login?next=' + request.path)
 
     # 查询当前用户的默认收货地址,如果没有数据则返回[]
     address = request.user.address_set.filter(isDefault=True)

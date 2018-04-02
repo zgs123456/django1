@@ -9,6 +9,7 @@ from .models import GoodsCategory, IndexGoodsBanner, IndexPromotionBanner, Index
 from  django.http import Http404
 from haystack.generic_views import SearchView
 from utils.page_list import get_page_list
+import json
 
 
 def fdfs_test(request):
@@ -39,7 +40,7 @@ def index(request):
             'adv_list': adv_list,
         }
         cache.set('index', context, 3600)
-
+    context['total_count'] = get_cart_total(request)
     response = render(request, 'index.html', context)
 
     return response
@@ -79,6 +80,7 @@ def detail(request, sku_id):
         'other_list': other_list,
 
     }
+    context['total_count'] = get_cart_total(request)
     return render(request, 'detail.html', context)
 
 
@@ -119,8 +121,7 @@ def list_sku(request, category_id):
     #     page_list = range(total_page - 4, total_page + 1)
     # else:
     #     page_list = range(pindex - 2, pindex + 3)
-    page_list=get_page_list(total_page,pindex)
-
+    page_list = get_page_list(total_page, pindex)
 
     context = {
         'tatle': '商品列表',
@@ -131,18 +132,40 @@ def list_sku(request, category_id):
         'order': order,
         'page_list': page_list,
     }
+    context['total_count'] = get_cart_total(request)
+
     return render(request, 'list.html', context)
 
 
 class MySearchView(SearchView):
+    def get(self, request, *args, **kwargs):
+        self.curr_request = request
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['title']='搜索结果'
-        context['category_list']=GoodsCategory.objects.all()
+        context['title'] = '搜索结果'
+        context['category_list'] = GoodsCategory.objects.all()
 
-        #页码控制
-        total_page=context['paginator'].num_pages
-        pindex=context['page_obj'].number
-        context['page_list']=get_page_list(total_page,pindex)
-
+        # 页码控制
+        total_page = context['paginator'].num_pages
+        pindex = context['page_obj'].number
+        context['page_list'] = get_page_list(total_page, pindex)
+        context['total_count'] = get_cart_total(self.curr_request)
         return context
+
+
+def get_cart_total(request):
+    total_count = 0
+    if request.user.is_authenticated():
+        redis_client = get_redis_connection()
+        for v in redis_client.hvals('cart%d' % request.user.id):
+            total_count += int(v)
+    else:
+        cart_str = request.COOKIES.get('cart')
+        if cart_str:
+            cart_dict = json.loads(cart_str)
+            for k, v in cart_dict.items():
+                total_count += v
+
+    return total_count

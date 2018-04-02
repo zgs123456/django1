@@ -151,7 +151,7 @@ LOGIN_URL = '/users/login'
 DEFAULT_FILE_STORAGE = 'utils.fastdfs.storage.FdfsStorage'
 
 CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
-SERVER_IP = 'http://192.168.111.3:8888/'
+SERVER_IP = 'http://192.168.135.3:8888/'
 
 TINYMCE_DEFAULT_CONFIG = {
   'theme': 'advanced', # 丰富样式

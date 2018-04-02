@@ -31,7 +31,7 @@
                     <span>|</span>
                     <a href="/users/info">用户中心</a>
                     <span>|</span>
-                    <a href="cart.html">我的购物车</a>
+                    <a href="/cart/">我的购物车</a>
                     <span>|</span>
                     <a href="/users/order">我的订单</a>
                 </div>
@@ -42,14 +42,16 @@
     
 
     <div class="search_bar clearfix">
-        <a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
+        <a href="/index" class="logo fl"><img src="/static/images/logo.png"></a>
         <div class="search_con fl">
-            <input type="text" class="input_text fl" name="" placeholder="搜索商品">
-            <input type="button" class="input_btn fr" name="" value="搜索">
+            <form action="/search/" method="get">
+            <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+            <input type="submit" class="input_btn fr"  value="搜索">
+            </form>
         </div>
         <div class="guest_cart fr">
-            <a href="#" class="cart_name fl">我的购物车</a>
-            <div class="goods_count fl" id="show_count">1</div>
+            <a href="/cart/" class="cart_name fl">我的购物车</a>
+            <div class="goods_count fl" id="show_count">0</div>
         </div>
     </div>
 
@@ -58,7 +60,7 @@
         <div class="navbar">
             <h1 class="fl">全部商品分类</h1>
             <ul class="navlist fl">
-                <li><a href="/">首页</a></li>
+                <li><a href="/index">首页</a></li>
                 <li class="interval">|</li>
                 <li><a href="/">手机生鲜</a></li>
                 <li class="interval">|</li>
@@ -86,13 +88,13 @@
         <div class="slide fl">
             <ul class="slide_pics">
                 
-                    <li><a href="/1"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69LCAbuGaAACpB-LsCdE6260378"
+                    <li><a href="/1"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69LCAbuGaAACpB-LsCdE6260378"
                                                             alt="梅珍 海南中国红莲雾1kg 三亚新鲜水果"></a></li>
                 
-                    <li><a href="/2"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69H2AOhf-AAC3B-z8J2c3703963"
+                    <li><a href="/2"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69H2AOhf-AAC3B-z8J2c3703963"
                                                             alt="埃及 进口丑橙 约4kg装 新鲜水果"></a></li>
                 
-                    <li><a href="/5"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69GCAObNiAAETwXb_pso2627307"
+                    <li><a href="/5"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69GCAObNiAAETwXb_pso2627307"
                                                             alt="烟台精品红富士 巧思铂金级 4个 75号 简装"></a></li>
                 
             </ul>
@@ -102,9 +104,9 @@
         </div>
         <div class="adv fl">
             
-                <a href="http://www.itcast.cn/"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q6_oOADmsxAAA98yvCs1I4787844" alt="3月大促"></a>
+                <a href="http://www.itcast.cn/"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q6_oOADmsxAAA98yvCs1I4787844" alt="3月大促"></a>
             
-                <a href="http://www.itcast.cn/subject/pythonzly/index.shtml"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q6_nKAUmpfAAA2pLUeB606771413" alt="4月大促"></a>
+                <a href="http://www.itcast.cn/subject/pythonzly/index.shtml"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q6_nKAUmpfAAA2pLUeB606771413" alt="4月大促"></a>
             
         </div>
     </div>
@@ -127,30 +129,30 @@
             </div>
 
             <div class="goods_con clearfix">
-                <div class="goods_banner fl"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69jGAIdfUAAAmv27pX4k8131497"></div>
+                <div class="goods_banner fl"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69jGAIdfUAAAmv27pX4k8131497"></div>
                 <ul class="goods_list fl">
                     
                         <li>
                             <h4><a href="/9">草莓</a></h4>
-                            <a href="/9"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7ASeAYBT7AAAljHPuXJg2486636"></a>
+                            <a href="/9"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7ASeAYBT7AAAljHPuXJg2486636"></a>
                             <div class="prize">¥ 10.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/2">埃及 进口丑橙 约4kg装 新鲜水果</a></h4>
-                            <a href="/2"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69ZGAba1yAAAh4Laa9PM8888275"></a>
+                            <a href="/2"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69ZGAba1yAAAh4Laa9PM8888275"></a>
                             <div class="prize">¥ 29.90</div>
                         </li>
                     
                         <li>
                             <h4><a href="/9">草莓</a></h4>
-                            <a href="/9"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7ASeAYBT7AAAljHPuXJg2486636"></a>
+                            <a href="/9"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7ASeAYBT7AAAljHPuXJg2486636"></a>
                             <div class="prize">¥ 10.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/5">烟台精品红富士 巧思铂金级 4个 75号 简装</a></h4>
-                            <a href="/5"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69bWAEJaUAAAcye9XGMY8406224"></a>
+                            <a href="/5"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69bWAEJaUAAAcye9XGMY8406224"></a>
                             <div class="prize">¥ 9.90</div>
                         </li>
                     
@@ -169,30 +171,30 @@
             </div>
 
             <div class="goods_con clearfix">
-                <div class="goods_banner fl"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69ieAM389AABHr3RQqFs2021673"></div>
+                <div class="goods_banner fl"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69ieAM389AABHr3RQqFs2021673"></div>
                 <ul class="goods_list fl">
                     
                         <li>
                             <h4><a href="/8">虾</a></h4>
-                            <a href="/8"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
+                            <a href="/8"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
                             <div class="prize">¥ 20.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/8">虾</a></h4>
-                            <a href="/8"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
+                            <a href="/8"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
                             <div class="prize">¥ 20.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/8">虾</a></h4>
-                            <a href="/8"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
+                            <a href="/8"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
                             <div class="prize">¥ 20.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/8">虾</a></h4>
-                            <a href="/8"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
+                            <a href="/8"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AD6AQ0bEAAA5OS4Kl4c9658442"></a>
                             <div class="prize">¥ 20.00</div>
                         </li>
                     
@@ -211,30 +213,30 @@
             </div>
 
             <div class="goods_con clearfix">
-                <div class="goods_banner fl"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69hqAaj-hAAAy1Tlm9So8546416"></div>
+                <div class="goods_banner fl"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69hqAaj-hAAAy1Tlm9So8546416"></div>
                 <ul class="goods_list fl">
                     
                         <li>
                             <h4><a href="/10">羊羔肉</a></h4>
-                            <a href="/10"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
+                            <a href="/10"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
                             <div class="prize">¥ 60.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/10">羊羔肉</a></h4>
-                            <a href="/10"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
+                            <a href="/10"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
                             <div class="prize">¥ 60.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/10">羊羔肉</a></h4>
-                            <a href="/10"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
+                            <a href="/10"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
                             <div class="prize">¥ 60.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/10">羊羔肉</a></h4>
-                            <a href="/10"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
+                            <a href="/10"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7AciAJIqyAAAgbU6nbaA7944036"></a>
                             <div class="prize">¥ 60.00</div>
                         </li>
                     
@@ -253,30 +255,30 @@
             </div>
 
             <div class="goods_con clearfix">
-                <div class="goods_banner fl"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69g6AXnmoAAAqR4DoSUg3933556"></div>
+                <div class="goods_banner fl"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69g6AXnmoAAAqR4DoSUg3933556"></div>
                 <ul class="goods_list fl">
                     
                         <li>
                             <h4><a href="/11">鸡蛋</a></h4>
-                            <a href="/11"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
+                            <a href="/11"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
                             <div class="prize">¥ 1.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/11">鸡蛋</a></h4>
-                            <a href="/11"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
+                            <a href="/11"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
                             <div class="prize">¥ 1.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/11">鸡蛋</a></h4>
-                            <a href="/11"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
+                            <a href="/11"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
                             <div class="prize">¥ 1.00</div>
                         </li>
                     
                         <li>
                             <h4><a href="/11">鸡蛋</a></h4>
-                            <a href="/11"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
+                            <a href="/11"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q7An-AUzKvAAAlcPqsn-E0646491"></a>
                             <div class="prize">¥ 1.00</div>
                         </li>
                     
@@ -295,7 +297,7 @@
             </div>
 
             <div class="goods_con clearfix">
-                <div class="goods_banner fl"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69gaAd-5MAAA-0ZoYkpM7785423"></div>
+                <div class="goods_banner fl"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69gaAd-5MAAA-0ZoYkpM7785423"></div>
                 <ul class="goods_list fl">
                     
                 </ul>
@@ -313,7 +315,7 @@
             </div>
 
             <div class="goods_con clearfix">
-                <div class="goods_banner fl"><img src="http://192.168.111.3:8888/group1/M00/00/00/wKhvA1q69f2APxs4AAA3sZPrVzQ2988799"></div>
+                <div class="goods_banner fl"><img src="http://192.168.86.3:8888/group1/M00/00/00/wKhvA1q69f2APxs4AAA3sZPrVzQ2988799"></div>
                 <ul class="goods_list fl">
                     
                 </ul>

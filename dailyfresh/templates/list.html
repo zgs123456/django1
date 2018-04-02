@@ -35,8 +35,8 @@
                 <ul>
                     {% for list in new_list %}
                         <li>
-                            <a href="/list{{ list.id }}"><img src="{{ list.default_image.url }}"></a>
-                            <h4><a href="/list{{ list.id }}">{{ list.name }}</a></h4>
+                            <a href="/{{ list.id }}"><img src="{{ list.default_image.url }}"></a>
+                            <h4><a href="/{{ list.id }}">{{ list.name }}</a></h4>
                             <div class="prize">￥{{ list.price }}</div>
                         </li>
                     {% endfor %}
@@ -62,12 +62,12 @@
             <ul class="goods_type_list clearfix">
                 {% for sku in page %}
                     <li>
-                        <a href="/list{{ sku.id }}"><img src="{{ sku.default_image.url }}"></a>
-                        <h4><a href="/list{{ sku.id }}">{{ sku.name }}</a></h4>
+                        <a href="/{{ sku.id }}"><img src="{{ sku.default_image.url }}"></a>
+                        <h4><a href="/{{ sku.id }}">{{ sku.name }}</a></h4>
                         <div class="operate">
                             <span class="prize">￥{{ sku.price }}</span>
                             <span class="unit">{{ sku.price }}/{{ sku.unit }}</span>
-                            <a href="#" class="add_goods" title="加入购物车"></a>
+                            <a href="javascript:;" id="{{ sku.id }} "class="add_goods" title="加入购物车"></a>
                         </div>
                     </li>
                 {% endfor %}
@@ -102,5 +102,21 @@
         </div>
     </div>
 
+    <script>
+    $('.add_goods').click(function () {
+        $.post('/cart/add',{
+            'sku_id':$(this).attr('id') ,
+            'count':1,
+            'csrfmiddlewaretoken':'{{ csrf_token }}'
+        },function (data) {
+            if(data.status==1){
+                alert("添加成功")
+                $('#show_count').html(data.total_count);
+            }
 
+        });
+
+
+    });
+    </script>
 {% endblock body2 %}

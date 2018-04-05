@@ -1,0 +1,58 @@
+{% extends 'base_user.html' %}
+
+{% block body2 %}
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <ul>
+                <li><a href="/users/info">· 个人信息</a></li>
+                <li><a href="#" class="active">· 全部订单</a></li>
+                <li><a href="/users/site">· 收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+            <h3 class="common_title2">评价订单商品</h3>
+            <form method="post">
+                <ul class="order_list_th w978 clearfix">
+                    <li class="col01">{{ order.add_date|date:'Y-m-j H:i:s' }}</li>
+                    <li class="col02">订单号：{{ order.order_id }}</li>
+                    <li class="col03 stress"><input type="submit" value="提交评论"></li>
+                </ul>
+                {% csrf_token %}
+                <table class="order_list_table w980">
+                    <tbody>
+                    <tr>
+                        <td width="100%">
+                            {% for detail in order.ordergoods_set.all %}
+                                <ul class="order_goods_list clearfix">
+                                    <li class="col01"><img src="{{ detail.sku.default_image.url }}"></li>
+                                    <li class="col02">{{ detail.sku.name }}<em><span>{{ detail.price }}</span>元/{{ detail.sku.unit }}
+                                    </em>
+                                    </li>
+                                    <li class="col03"><input type="text" style="width:300px;" name="{{ detail.id }}">
+                                    </li>
+                                    <li class="col04"></li>
+                                </ul>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup_con">
+        <div class="popup">
+            <p>
+                请到支付宝页面进行支付...
+                <input type="button" id="btnCancle" value="稍候支付">
+                &nbsp;
+                <input type="button" id="btnQuery" value="支付完成">
+            </p>
+        </div>
+
+        <div class="mask"></div>
+    </div>
+
+{% endblock body2 %}

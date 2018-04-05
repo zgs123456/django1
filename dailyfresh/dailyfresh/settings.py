@@ -176,3 +176,10 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 2
+APP_ID='2016091000481400'
+#支付宝公钥路径
+ALIPAY_PUBLIC_KEY=os.path.join(BASE_DIR,'utils/alipay_public_key.pem')
+#应用私钥路径
+APP_PRIVATE_KEY=os.path.join(BASE_DIR,'utils/app_private_key.pem')
+#沙箱环境网关
+ALIPAY_GATEWAY='https://openapi.alipaydev.com/gateway.do?'

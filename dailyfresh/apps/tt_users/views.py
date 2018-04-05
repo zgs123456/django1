@@ -328,3 +328,33 @@ def area(request):
         slist2.append({'id': s.id, 'title': s.title})
 
     return JsonResponse({'list': slist2})
+def urltest(request):
+    return HttpResponse('ok')
+
+
+class CommentView(LoginRequiredViewMixin, View):
+    def get(self, request):
+        order_id = request.GET.get('order_id')
+
+        order = OrderInfo.objects.get(pk=order_id)
+
+        context = {
+            'title': '评论商品',
+            'order': order,
+        }
+        return render(request, 'user_center_comment.html', context)
+
+    def post(self, request):
+        #虽然当前请求方式为post，但是order_id是在地址中的参数，所以使用GET来接收
+        order_id = request.GET.get('order_id')
+
+        order = OrderInfo.objects.get(pk=order_id)
+        order.status = 5
+        order.save()
+
+        dict = request.POST
+
+        for detail in order.ordergoods_set.all():
+            detail.comment = dict.get(str(detail.id))
+            detail.save()
+        return redirect('/users/order')

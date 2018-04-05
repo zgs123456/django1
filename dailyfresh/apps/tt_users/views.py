@@ -13,6 +13,9 @@ from utils.views import LoginRequiredViewMixin
 from django_redis import get_redis_connection
 from tt_goods.models import GoodsSKU
 import json
+from tt_orders.models import OrderInfo
+from django.core.paginator import Paginator, Page
+from utils.page_list import get_page_list
 
 
 class RegisterView(View):
@@ -175,28 +178,26 @@ class LoginView(View):
 
         # 如果登录成功则转到用户中心页面
         # 读取cookie
-        cart_str=request.COOKIES.get('cart')
+        cart_str = request.COOKIES.get('cart')
         if cart_str:
-            key='cart%d'%request.user.id
-            redis_client=get_redis_connection()
-            cart_dict=json.loads(cart_str)
-            for k ,v in cart_dict.items():
+            key = 'cart%d' % request.user.id
+            redis_client = get_redis_connection()
+            cart_dict = json.loads(cart_str)
+            for k, v in cart_dict.items():
                 # 判断购物车里是否有数据
-                if redis_client.hexists(key,k):
+                if redis_client.hexists(key, k):
                     # 有数据追加
-                    count1=int(redis_client.hget(key,k))
-                    count2=v
-                    count3=count1+count2
-                    if count3>5:
-                        count3=5
-                    redis_client.hset(key,k,count3)
+                    count1 = int(redis_client.hget(key, k))
+                    count2 = v
+                    count3 = count1 + count2
+                    if count3 > 5:
+                        count3 = 5
+                    redis_client.hset(key, k, count3)
                 else:
                     # 没有数据直接加数据
-                    redis_client.hset(key,k,v)
-
+                    redis_client.hset(key, k, v)
 
             response.delete_cookie('cart')
-
 
         return response
 
@@ -240,7 +241,23 @@ def info(request):
 
 @login_required
 def order(request):
-    context = {}
+    order_list = OrderInfo.objects.filter(user=request.user)
+    paginator = Paginator(order_list, 2)
+    total_page = paginator.num_pages
+
+    pindex = int(request.GET.get('pindex', 1))
+    if pindex <= 1:
+        pindex = 1
+    if pindex >= total_page:
+        pindex = total_page
+
+    page = paginator.page(pindex)
+    page_list = get_page_list(total_page, pindex)
+    context = {
+        'title': '我的订单',
+        'page': page,
+        'page_list': page_list,
+    }
     return render(request, 'user_center_order.html', context)
 
 

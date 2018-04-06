@@ -1,14 +1,44 @@
 {% extends 'base_user.html' %}
+
 {% block head %}
     <script>
-    $(function () {
-        $('.col04').each(function (i,n) {
-            var price=parseFloat($(n).prev().prev().find('span').text());
-            var count=parseInt($(n).prev().text());
-            var total=price*count;
-            $(n).text(total.toFixed(2)+'元');
+        $(function () {
+            $('.col04').each(function (i, n) {
+                var price = parseFloat($(n).prev().prev().find('span').text());
+                var count = parseInt($(n).prev().text());
+                var total = price * count;
+                $(n).text(total.toFixed(2) + '元');
+            });
+            //获取支付地址
+            $('.oper_btn').click(function () {
+                var order_id=$(this).attr('href1');
+                $('#btnQuery').attr('href1',order_id);
+                $.get('/order/pay', {
+                    'order_id': order_id
+                }, function (data) {
+                    if (data.status == 1) {
+                        $('.popup_con').fadeIn('fast');
+                        window.open(data.url);
+                    }
+                });
+            });
+            //支付查询
+            $('#btnCancle').click(function () {
+                $('.popup_con').fadeOut('fast');
+            });
+            $('#btnQuery').click(function () {
+                var order_id=$(this).attr('href1');
+                $.post('/order/query',{
+                    'order_id':order_id,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}'
+                },function (data) {
+                $('.popup_con').fadeOut('fast');
+                    if(data.status==1){
+                        location.reload();
+                    }
+                });
+            });
         });
-    });
     </script>
 {% endblock head %}
 
@@ -24,11 +54,12 @@
         </div>
         <div class="right_content clearfix">
             <h3 class="common_title2">全部订单</h3>
+
             {% for order in page %}
                 <ul class="order_list_th w978 clearfix">
-                    <li class="col01">{{ order.update_date|date:'Y-m-j H:i:s' }}</li>
+                    <li class="col01">{{ order.add_date|date:'Y-m-j H:i:s' }}</li>
                     <li class="col02">订单号：{{ order.order_id }}</li>
-                    <li class="col02 stress">
+                    <li class="col03 stress">
                         {% if order.status == 1 %}
                             待支付
                         {% elif order.status == 2 %}
@@ -50,36 +81,37 @@
                             {% for detail in order.ordergoods_set.all %}
                                 <ul class="order_goods_list clearfix">
                                     <li class="col01"><img src="{{ detail.sku.default_image.url }}"></li>
-                                    <li class="col02">{{ detail.sku.name }}<em><span>{{ detail.price }}</span>元/{{ detail.sku.unit }}</em></li>
+                                    <li class="col02">{{ detail.sku.name }}<em><span>{{ detail.price }}</span>元/{{ detail.sku.unit }}
+                                    </em>
+                                    </li>
                                     <li class="col03">{{ detail.count }}</li>
                                     <li class="col04"></li>
                                 </ul>
                             {% endfor %}
-
                         </td>
                         <td width="15%">{{ order.total_amount }}元</td>
                         <td width="15%">
                             {% if order.status == 1 %}
-                            待支付
-                        {% elif order.status == 2 %}
-                            待发货
-                        {% elif order.status == 3 %}
-                            待收货
-                        {% elif order.status == 4 %}
-                            待评价
-                        {% elif order.status == 5 %}
-                            已完成
-                        {% endif %}
+                                待支付
+                            {% elif order.status == 2 %}
+                                待发货
+                            {% elif order.status == 3 %}
+                                待收货
+                            {% elif order.status == 4 %}
+                                待评价
+                            {% elif order.status == 5 %}
+                                已完成
+                            {% endif %}
                         </td>
                         <td width="15%">
                             {% if order.status == 1 %}
-                                <a href="#" class="oper_btn">去付款</a>
+                                <a href="javascript:;" class="oper_btn" href1="{{ order.order_id }}">去付款</a>
                             {% elif order.status == 2 %}
                                 &nbsp;
                             {% elif order.status == 3 %}
                                 <a href="#" class="oper_btn">收货</a>
                             {% elif order.status == 4 %}
-                                <a href="#" class="oper_btn">去评价</a>
+                                <a href="/users/comment?order_id={{ order.pk }}" class="oper_btn">去评价</a>
                             {% elif order.status == 5 %}
                                 已完成
                             {% endif %}
@@ -88,7 +120,6 @@
                     </tbody>
                 </table>
             {% endfor %}
-
 
             <div class="pagenation">
                 {% if page.has_previous %}
@@ -117,6 +148,19 @@
                 {% endif %}
             </div>
         </div>
+    </div>
+
+    <div class="popup_con">
+        <div class="popup">
+            <p>
+                请到支付宝页面进行支付...
+            <input type="button" id="btnCancle" value="稍候支付">
+            &nbsp;
+            <input type="button" id="btnQuery" value="支付完成">
+            </p>
+        </div>
+
+        <div class="mask"></div>
     </div>
 
 {% endblock body2 %}

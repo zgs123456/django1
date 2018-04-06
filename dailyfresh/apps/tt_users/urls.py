@@ -13,5 +13,7 @@ urlpatterns=[
     url('^site$',views.SiteView.as_view()),
     # # url('^site$',login_required(views.SiteView.as_view())),
     url('^area$',views.area),
+    url('^urltest$',views.urltest),
+    url('^comment$',views.CommentView.as_view()),
 
 ]

@@ -8,6 +8,7 @@ from .models import OrderInfo, OrderGoods
 import uuid
 from django.db import transaction
 from django.db.models import F
+from utils import alipay_ttsx
 
 
 # Create your views here.
@@ -109,3 +110,23 @@ def handle(request):
         transaction.savepoint_rollback(sid)
 
         return JsonResponse({'status': 3})
+
+
+def pay(request):
+    order_id = request.GET.get('order_id')
+    order = OrderInfo.objects.get(pk=order_id)
+    total = order.total_amount
+    url = alipay_ttsx.pay(order_id, total)
+    return JsonResponse({'status': 1, 'url': url})
+
+
+def query(request):
+    order_id = request.POST.get('order_id')
+    if alipay_ttsx.query(order_id):
+        order = OrderInfo.objects.get(pk=order_id)
+        order.status = 2
+        order.save()
+        return JsonResponse({'status': 1})
+    else:
+        return JsonResponse({'status': 2})
+

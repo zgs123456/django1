@@ -71,6 +71,8 @@ def detail(request, sku_id):
         # 不能超过5个，则删除
         if redis_client.llen(key) > 5:  # 判断列表的元素个数
             redis_client.rpop(key)  # 从列表的右侧删除一个元素
+    comment_list = sku.ordergoods_set.exclude(comment='')
+
 
     context = {
         'title': '商品详情',
@@ -78,6 +80,7 @@ def detail(request, sku_id):
         'category_list': category_list,
         'new_list': new_list,
         'other_list': other_list,
+        'comment_list': comment_list,
 
     }
     context['total_count'] = get_cart_total(request)

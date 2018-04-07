@@ -27,7 +27,7 @@ SECRET_KEY = 'e&o%-g1o@-9pgx*_$@8#(2yc2i33dob-5gi_s^am0-eu+&sil6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -176,6 +176,7 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 2
+
 
 APP_ID='2016091000481400'
 #支付宝公钥路径

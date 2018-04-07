@@ -329,7 +329,6 @@ def area(request):
 
     return JsonResponse({'list': slist2})
 
-
 def urltest(request):
     return HttpResponse('ok')
 
@@ -360,4 +359,3 @@ class CommentView(LoginRequiredViewMixin, View):
             detail.comment = dict.get(str(detail.id))
             detail.save()
         return redirect('/users/order')
-

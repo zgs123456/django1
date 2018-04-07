@@ -16,4 +16,5 @@ urlpatterns=[
     url('^urltest$',views.urltest),
     url('^comment$',views.CommentView.as_view()),
 
+
 ]
